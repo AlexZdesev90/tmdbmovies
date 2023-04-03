@@ -4,16 +4,31 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import { Link } from "react-router-dom";
 import MovieList from "../../components/movieList/movieList";
+import { Pagination } from "../../components/Pagination";
 
 const Home = () => {
 
-    const [ popularMovies, setPopularMovies ] = useState([])
+    const [ popularMovies, setPopularMovies ] = useState([]);
+    const [ currentPage, setCurrentPage] = useState(1);
+    const [moviesPerPage] = useState(100)
+    const [totalPages, setTotalPages] = useState(20);
+
 
     useEffect(() => {
-        fetch("https://api.themoviedb.org/3/movie/popular?api_key=4e44d9029b1270a757cddc766a1bcb63&language=en-US")
+        fetch(`https://api.themoviedb.org/3/movie/popular?page=${currentPage}&api_key=5058efa201f4ad4fba59a8deb39502b3`)
         .then(res => res.json())
-        .then(data => setPopularMovies(data.results))
-    }, [])
+        .then(data => {
+            setPopularMovies(data.results);
+        })
+    }, [currentPage])
+
+    const lastMovieIndex = currentPage * moviesPerPage;
+    const firstMovieIndex = lastMovieIndex - moviesPerPage
+    const currentMovie = popularMovies.slice(firstMovieIndex, lastMovieIndex);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(prev => prev + 1);
+    const prevPage = () => setCurrentPage(prev => prev - 1);
 
     return (
         <>
@@ -21,9 +36,10 @@ const Home = () => {
                 <Carousel
                     showThumbs={false}
                     autoPlay={true}
-                    transitionTime={3}
+                    transitionTime={1}
                     infiniteLoop={true}
                     showStatus={false}
+                    showArrows={false}
                 >
                     {
                         popularMovies.map(movie => (
@@ -46,7 +62,11 @@ const Home = () => {
                         ))
                     }
                 </Carousel>
-                <MovieList />
+                <MovieList movies={currentMovie} currentPage={currentPage}/>
+                <button onClick={prevPage}>prev</button>
+                <button onClick={nextPage}>next</button>
+                <Pagination totalPages={totalPages} paginate={paginate}
+                />
             </div>
         </>
     )

@@ -1,9 +1,9 @@
 .header {
-    margin: 0 2.5rem;
-    padding: .5rem 0;
+    padding: .5rem 2.5rem;
     align-items: center;
     display: flex;
     justify-content:space-between;
+    background-color: rgb(59, 5, 22);
 }
 
 .headerLeft, .headerRight {
@@ -17,10 +17,13 @@ a > span{
     font-size: 1.3rem;
     cursor: pointer;
     color: white;
+    padding: 0.5rem;
+    border: 2px solid white;
+    border-radius: 20px;
 }
 
 a > span:hover {
-    color: red;
+    color: lawngreen;
 }
 
 .header__icon {
