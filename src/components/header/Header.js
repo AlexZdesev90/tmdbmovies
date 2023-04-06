@@ -2,15 +2,17 @@ import React from 'react';
 import './Header.css';
 import { Link } from 'react-router-dom';
 import { SearchBar } from '../SearchBar/SearchBar';
+// import logo from '../../assets/a5eb6ccbc2090208b027b36429a71c02.svg';
+import logo from '../../assets/5595936_55552.jpg';
 
 const Header = () => {
   return (
     <div className="header">
       <div className="headerLeft">
         <Link to="/">
-          <img
+        <img
             className="header__icon"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png"
+            src={logo}
           />
         </Link>
         {/* <Link to="/movies/popular" style={{ textDecoration: 'none' }}>
@@ -24,6 +26,7 @@ const Header = () => {
         </Link> */}
         <Link to="/person" style={{ textDecoration: 'none' }}>
           <span>Actors</span>
+          
         </Link>
       </div>
       {/* <SearchBar/> */}

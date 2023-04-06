@@ -1,75 +1,102 @@
-import React, { useEffect, useState } from "react"
-import "./home.css"
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import React, { useCallback, useEffect, useState } from 'react';
+import './home.css';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
-import { Link } from "react-router-dom";
-import MovieList from "../../components/movieList/movieList";
-import { Pagination } from "../../components/Pagination";
+import { Link } from 'react-router-dom';
+import MovieList from '../../components/movieList/movieList';
+import { SearchBar } from '../../components/SearchBar/SearchBar';
+import debounce from 'lodash.debounce';
+import { Pagination, Grid } from '@mui/material';
+import { DropDown} from '../../components/dropDownMenu/DropDown';
 
 const Home = () => {
+  const [popularMovies, setPopularMovies] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState();
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredValue, setFilteredValue] = useState('');
+  const [filter, setFilter] = useState('popular');
 
-    const [ popularMovies, setPopularMovies ] = useState([]);
-    const [ currentPage, setCurrentPage] = useState(1);
-    const [moviesPerPage] = useState(100)
-    const [totalPages, setTotalPages] = useState(20);
 
+  useEffect(() => {
+    fetch(
+      `https://api.themoviedb.org/3/movie/${filter}?page=${currentPage}&api_key=5058efa201f4ad4fba59a8deb39502b3`)
+      .then((res) => res.json())
+      .then((data) => {
+        setPopularMovies(data.results);
+        setTotalPages(data.total_pages);
+      });
+  }, [filter, `${searchValue === '' ? currentPage : ''}`]);
+    
+    const updateSearchValue = useCallback(
+      debounce((value) => {
+        setSearchValue(value);
+        setFilteredValue(value);
+      }, 500),
+      [],
+      );
+      
+  const onChangeSearchValue = (searchValue) => {
+    setSearchValue(searchValue);
+    updateSearchValue(searchValue);
+  };
 
-    useEffect(() => {
-        fetch(`https://api.themoviedb.org/3/movie/popular?page=${currentPage}&api_key=5058efa201f4ad4fba59a8deb39502b3`)
-        .then(res => res.json())
-        .then(data => {
-            setPopularMovies(data.results);
-        })
-    }, [currentPage])
+  const setNewTotalPages = (num) => {
+    setTotalPages(num);
+  }
 
-    const lastMovieIndex = currentPage * moviesPerPage;
-    const firstMovieIndex = lastMovieIndex - moviesPerPage
-    const currentMovie = popularMovies.slice(firstMovieIndex, lastMovieIndex);
+  const onClickChanged = (value) => {
+    console.log("change type")
+    setFilter(value)
+    setSearchValue('');
+    setFilteredValue('')
+  }
 
-    const paginate = pageNumber => setCurrentPage(pageNumber);
-    const nextPage = () => setCurrentPage(prev => prev + 1);
-    const prevPage = () => setCurrentPage(prev => prev - 1);
+  return (
+    <>
+      <div className="poster">
+        <Carousel
+          showThumbs={false}
+          autoPlay
+          transitionTime={1}
+          infiniteLoop={true}
+          showStatus={false}
+          showArrows={true}
+          showIndicators={true}
+        >
+          {popularMovies?.map((movie) => (
+            <Link key={movie.id} style={{ textDecoration: 'none', color: 'white' }} to={`/movie/${movie.id}`}>
+              <div className="posterImage">
+                <img src={`https://image.tmdb.org/t/p/original${movie && movie.backdrop_path}`} alt="img" />
+              </div>
+              <div className="posterImage__overlay">
+                <div className="posterImage__title">{movie ? movie.original_title : ''}</div>
+              </div>
+            </Link>
+          ))}
+        </Carousel>
+        <div className='handliers'>
+          <SearchBar searchValue={searchValue} onChangeSearchValue={onChangeSearchValue} />
+          <DropDown filter={filter} onClickChanged={onClickChanged}/>
+        </div>
+        <MovieList
+          searchValue={filteredValue}
+          currentPage={currentPage}
+          setNewTotalPages={(num) => setNewTotalPages(num)}
+          popularMovies={popularMovies}
+        />
+        <Grid container justifyContent="center" bgColor="primary" sx={{ p: '2rem' }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(_, num) => setCurrentPage(num)}
+            variant="outlined"
+            color="secondary"
+          />
+        </Grid>
+      </div>
+    </>
+  );
+};
 
-    return (
-        <>
-            <div className="poster">
-                <Carousel
-                    showThumbs={false}
-                    autoPlay={true}
-                    transitionTime={1}
-                    infiniteLoop={true}
-                    showStatus={false}
-                    showArrows={false}
-                >
-                    {
-                        popularMovies.map(movie => (
-                            <Link style={{textDecoration:"none",color:"white"}} to={`/movie/${movie.id}`} >
-                                <div className="posterImage">
-                                    <img src={`https://image.tmdb.org/t/p/original${movie && movie.backdrop_path}`} />
-                                </div>
-                                <div className="posterImage__overlay">
-                                    <div className="posterImage__title">{movie ? movie.original_title: ""}</div>
-                                    <div className="posterImage__runtime">
-                                        {movie ? movie.release_date : ""}
-                                        <span className="posterImage__rating">
-                                            {movie ? movie.vote_average :""}
-                                            <i className="fas fa-star" />{" "}
-                                        </span>
-                                    </div>
-                                    <div className="posterImage__description">{movie ? movie.overview : ""}</div>
-                                </div>
-                            </Link>
-                        ))
-                    }
-                </Carousel>
-                <MovieList movies={currentMovie} currentPage={currentPage}/>
-                <button onClick={prevPage}>prev</button>
-                <button onClick={nextPage}>next</button>
-                <Pagination totalPages={totalPages} paginate={paginate}
-                />
-            </div>
-        </>
-    )
-}
-
-export default Home
+export default Home;

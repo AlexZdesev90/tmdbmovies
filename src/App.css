@@ -1,5 +1,6 @@
 .App {
-  background: linear-gradient(#c1155a, #7e0d3e);
+  background: linear-gradient(#6a0b31, #e189b5);
   color: white;
   font-family: sans-serif;
+  min-height: 100vh;
 }

@@ -1,39 +1,49 @@
-import React, {useEffect, useState} from "react"
-import "./movieList.css"
-import { useParams } from "react-router-dom"
-import Cards from "../card/card"
+import React, { useEffect, useState } from 'react';
+import './movieList.css';
+// import { useParams } from "react-router-dom"
+import Cards from '../card/card';
 
-const MovieList = ({movies, currentPage}) => {
-    
-    const [movieList, setMovieList] = useState([])
-    const {id} = useParams()
+const MovieList = ({
+  searchValue,
+  currentPage,
+  setNewTotalPages,
+  popularMovies,
+}) => {
+  const [movieList, setMovieList] = useState();
 
-    useEffect(() => {
-        getData()
-    }, [])
+  useEffect(() => {
+    setMovieList(popularMovies);
+  }, [popularMovies]);
 
-    useEffect(() => {
-        getData(currentPage)
-    }, [id, currentPage])
+  const queryString = (searchValue) => (searchValue !== '' ? `?query=${searchValue}&` : '?');
 
-    const getData = (currentPage) => {
-        fetch(`https://api.themoviedb.org/3/movie/popular?page=${currentPage}&api_key=5058efa201f4ad4fba59a8deb39502b3`)
-        .then(res => res.json())
-        .then(data => setMovieList(data.results))
-    }
+  useEffect(() => {
+    getData(searchValue);
+  }, [searchValue, currentPage]);
 
-    return (
-        <div className="movie__list">
-            <h2 className="list__title">POPULAR</h2>
-            <div className="list__cards">
-                {
-                    movieList.map(movie => (
-                        <Cards movie={movie} currentPage={currentPage} />
-                    ))
-                }
-            </div>
-        </div>
+  const getData = (searchValue) => {
+    fetch(
+      `https://api.themoviedb.org/3/search/movie${queryString(
+        searchValue,
+      )}page=${currentPage}&api_key=5058efa201f4ad4fba59a8deb39502b3`,
     )
-}
+      .then((res) => res.json())
+      .then((data) => {
+        setMovieList(data.results);
+        setNewTotalPages(data.total_pages);
+      });
+  };
 
-export default MovieList
+  return (
+    <div className="movie__list">
+      <h2 className="list__title">MOVIES</h2>
+      <div className="list__cards">
+        {movieList?.map((movie) => (
+          <Cards key={movie.id} movie={movie} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default MovieList;

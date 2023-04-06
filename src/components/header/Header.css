@@ -23,12 +23,21 @@ a > span{
 }
 
 a > span:hover {
-    color: lawngreen;
+    color: rgb(252, 0, 160);
 }
 
 .header__icon {
+    position:relative;
     width: 80px;
     cursor: pointer;
+    border-radius: 50%;
+    width: 100px;
+    border: 2px solid white;
+    transition: scale 0.3s ease;
+}
+
+.header__icon:hover {
+    scale: 1.1;
 }
 
 .user__avatar {
