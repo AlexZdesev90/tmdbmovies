@@ -5,7 +5,7 @@ import classes from './error.module.css';
 export const Error = () => {
   return (
     <div className={classes.error}>
-        <img src={img} width={'100%'}/>
+        <img src={img} width={'100%'} alt="error"/>
     </div>
   )
 }

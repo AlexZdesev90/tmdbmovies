@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import './movieList.css';
+import classes from './movieList.module.css';
 // import { useParams } from "react-router-dom"
 import Cards from '../card/card';
 
-const MovieList = ({
-  searchValue,
-  currentPage,
-  setNewTotalPages,
-  popularMovies,
-}) => {
+const MovieList = ({ searchValue, currentPage, setNewTotalPages, popularMovies }) => {
   const [movieList, setMovieList] = useState();
 
   useEffect(() => {
@@ -35,9 +30,9 @@ const MovieList = ({
   };
 
   return (
-    <div className="movie__list">
-      <h2 className="list__title">MOVIES</h2>
-      <div className="list__cards">
+    <div className={classes.movie__list}>
+      <h2 className={classes.list__title}>MOVIES</h2>
+      <div className={classes.list__cards}>
         {movieList?.map((movie) => (
           <Cards key={movie.id} movie={movie} />
         ))}

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import { Link } from 'react-router-dom';
-import './person.css';
+import classes from './person.module.css';
 import PersonList from '../../components/personList.js/personList';
 import debounce from 'lodash.debounce';
 import { SearchBar } from '../../components/SearchBar/SearchBar';
@@ -34,9 +34,8 @@ const Person = () => {
   );
 
   const setNewTotalPages = (num) => {
-    setTotalPages(num)
-  }
-
+    setTotalPages(num);
+  };
 
   const onChangeSearchValue = (searchValue) => {
     setSearchValue(searchValue);
@@ -45,7 +44,7 @@ const Person = () => {
 
   return (
     <>
-      <div className="poster">
+      <div className={classes.poster}>
         <Carousel
           showThumbs={false}
           autoPlay
@@ -56,21 +55,30 @@ const Person = () => {
           showIndicators={true}
         >
           {popularPersons?.map((person) => (
-            <Link key={person.name} style={{ textDecoration: 'none', color: 'white' }} to={`/person/${person.id}`}>
-              <div className="personImage">
+            <Link
+              key={person.name}
+              style={{ textDecoration: 'none', color: 'white' }}
+              to={`/person/${person.id}`}
+            >
+              <div className={classes.personImage}>
                 <img
                   src={`https://image.tmdb.org/t/p/original${person && person.profile_path}`}
                   alt="img"
                 />
               </div>
-              <div className="person__overlay">
-                <div className="personImage__name">{person ? person.name : ''}</div>
+              <div className={classes.person__overlay}>
+                <div className={classes.personImage__name}>{person ? person.name : ''}</div>
               </div>
             </Link>
           ))}
         </Carousel>
         <SearchBar searchValue={searchValue} onChangeSearchValue={onChangeSearchValue} />
-        <PersonList searchValue={filteredValue} currentPage={currentPage} setNewTotalPages={setNewTotalPages} popularPersons={popularPersons}/>
+        <PersonList
+          searchValue={filteredValue}
+          currentPage={currentPage}
+          setNewTotalPages={setNewTotalPages}
+          popularPersons={popularPersons}
+        />
 
         <Grid container justifyContent="center" sx={{ p: '2rem' }}>
           <Pagination

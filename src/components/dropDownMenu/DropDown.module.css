@@ -12,7 +12,7 @@
 }
 
 .dropdown:hover > .label {
-  background: rgb(91, 82, 74);
+  background: rgb(105, 52, 86);
 }
 
 .label {
@@ -20,13 +20,14 @@
   border-top-right-radius: 6px;
   border-top-left-radius: 6px;
   cursor: pointer;
-  background: #455a64;
+  background: #55052c;
   padding: 0.8rem 1rem;
   width: 300px;
   height: 50px;
   display: block;
   box-sizing: border-box;
   transition: all 0.3s;
+  text-transform: uppercase;
 }
 
 .ul {
@@ -35,7 +36,7 @@
   margin-block-start: 0;
   margin-block-end: 0;
   padding-inline-start: 0;
-  background: #546e7a;
+  background: #bc7daa;
   opacity: 0;
   visibility: hidden;
   width: 300px;
@@ -51,20 +52,12 @@
 .ul button {
   width: 100%;
   cursor: pointer;
-  background-color: rgb(65, 10, 76);
+  background-color: rgb(103, 31, 80);
 }
 
-/* .ul::before {
-  content: '';
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background: #546e7a;
-  transform: rotate(45deg);
-  top: -7px;
-  left: 20px;
-  z-index: -1;
-} */
+.ul button:hover {
+  background-color: rgb(59, 13, 43);
+}
 
 .link {
   color: #fff;
@@ -73,10 +66,6 @@
   padding: 0.5rem 1rem;
   text-decoration: none;
   transition: all 0.3s;
-}
-
-.current {
-  margin-right: 10px;
 }
 
 @media screen and (max-width: 500px) {

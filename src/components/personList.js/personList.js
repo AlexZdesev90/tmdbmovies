@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import classes from './personList.module.css';
-// import { useParams } from "react-router-dom"
 import PersonCard from '../personCard.js/personCard';
 
 const PersonList = ({ searchValue, currentPage, setNewTotalPages, popularPersons }) => {
   const [personList, setPersonList] = useState([]);
-  // const {id} = useParams()
 
   useEffect(() => {
     setPersonList(popularPersons);
@@ -29,11 +27,6 @@ const PersonList = ({ searchValue, currentPage, setNewTotalPages, popularPersons
         setNewTotalPages(data.total_pages);
     });
   };
-  // const filtered = (searchValue) => {
-  //     return personList.filter(item => item.name.includes(searchValue))
-  // }
-
-  // const result = filtered(searchValue)
 
   return (
     <div className={classes.person__list}>

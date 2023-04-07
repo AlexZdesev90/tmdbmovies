@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import './home.css';
+import classes from './home.module.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import { Link } from 'react-router-dom';
@@ -54,7 +54,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="poster">
+      <div className={classes.poster}>
         <Carousel
           showThumbs={false}
           autoPlay
@@ -66,16 +66,16 @@ const Home = () => {
         >
           {popularMovies?.map((movie) => (
             <Link key={movie.id} style={{ textDecoration: 'none', color: 'white' }} to={`/movie/${movie.id}`}>
-              <div className="posterImage">
+              <div className={classes.posterImage}>
                 <img src={`https://image.tmdb.org/t/p/original${movie && movie.backdrop_path}`} alt="img" />
               </div>
-              <div className="posterImage__overlay">
-                <div className="posterImage__title">{movie ? movie.original_title : ''}</div>
+              <div className={classes.posterImage__overlay}>
+                <div className={classes.posterImage__title}>{movie ? movie.original_title : ''}</div>
               </div>
             </Link>
           ))}
         </Carousel>
-        <div className='handliers'>
+        <div className={classes.handliers}>
           <SearchBar searchValue={searchValue} onChangeSearchValue={onChangeSearchValue} />
           <DropDown filter={filter} onClickChanged={onClickChanged}/>
         </div>
